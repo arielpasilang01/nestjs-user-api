@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
-import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from 'src/metadata';
 
@@ -28,7 +27,11 @@ export class AuthGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    const token = this.extractTokenFromCookie(request);
+
+    console.log({ request });
+    console.log({ token });
+
     if (!token) {
       throw new UnauthorizedException();
     }
@@ -45,8 +48,7 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+  private extractTokenFromCookie(request: any): string | null {
+    return request.cookies['auth_token'] || null; // Replace 'jwt' with the cookie name you set
   }
 }

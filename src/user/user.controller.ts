@@ -10,6 +10,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Public } from 'src/metadata';
 
 /**
  * whatever the string pass in controller decorator it will be appended to
@@ -26,6 +27,7 @@ export class UserController {
    * so the API URL to create User will be
    * POST http://localhost:3000/user
    */
+
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
@@ -36,7 +38,6 @@ export class UserController {
    * so the API URL will be
    * GET http://localhost:3000/user
    */
-
   @Get()
   findAll() {
     return this.userService.findAllUser();
@@ -47,12 +48,12 @@ export class UserController {
    * so the API URL will be
    * GET http://localhost:3000/user/:id
    */
-
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.viewUser(+id);
   }
-
+  @Public()
   @Get(':username')
   findUserByUserName(@Param('username') username: string) {
     return this.userService.findUserByUserName(username);
@@ -63,6 +64,7 @@ export class UserController {
    * so the API URL will be
    * PATCH http://localhost:3000/user/:id
    */
+  @Public()
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(+id, updateUserDto);
@@ -73,6 +75,7 @@ export class UserController {
    * so the API URL will be
    * DELETE http://localhost:3000/user/:id
    */
+  @Public()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.removeUser(+id);
